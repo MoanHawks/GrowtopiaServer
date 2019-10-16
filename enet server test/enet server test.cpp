@@ -667,7 +667,7 @@ string PlayerDB::fixColors(string text) {
 }
 
 int PlayerDB::playerLogin(ENetPeer* peer, string username, string password) {
-	std::ifstream ifs("players/" + PlayerDB::getProperName(username) + ".json");
+	std::ifstream ifs("players/``" + PlayerDB::getProperName(username) + ".json");
 	if (ifs.is_open()) {
 		json j;
 		ifs >> j;
@@ -729,7 +729,7 @@ int PlayerDB::playerRegister(string username, string password, string passwordve
         return -1;
     }
 	
-	std::ofstream o("players/" + username + ".json");
+	std::ofstream o("players/``" + username + ".json");
 	if (!o.is_open()) {
 		cout << GetLastError() << endl;
 		_getch();
