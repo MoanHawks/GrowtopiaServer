@@ -478,7 +478,8 @@ struct PlayerInfo {
 	string rawName = "";
 	string displayName = "";
 	string country = "";
-	int adminLevel = 0;
+        string platformID = "";
+	int adminLevel = 0; //getting admin level but is still 0 should by remove?
 	string currentWorld = "EXIT";
 	bool radio = true;
 	int x;
@@ -3413,6 +3414,10 @@ label|Download Latest Version
 						else if(id == "requestedName")
 						{
 							((PlayerInfo*)(event.peer->data))->requestedName = act;
+						}
+                                                else if(id == "platformID")
+						{
+							((PlayerInfo*)(event.peer->data))->platformID = act;
 						}
 						else if (id == "country")
 						{
