@@ -94,11 +94,6 @@ ulong _byteswap_ulong(ulong x)
 }
 #endif
 
-//configs
-int configPort = 17091;
-
-
-
 /***bcrypt***/
 
 bool verifyPassword(string password, string hash) {
@@ -478,6 +473,7 @@ struct PlayerInfo {
 	string rawName = "";
 	string displayName = "";
 	string country = "";
+        string platformID = "";
 	int adminLevel = 0;
 	string currentWorld = "EXIT";
 	bool radio = true;
@@ -2173,32 +2169,6 @@ unsigned char* getA(string fileName, int* pSizeOut, bool bAddBasePath, bool bAut
 	return pData;
 }
 
-void loadConfig() {
-	/*inside config.json:
-	{
-	"port": 17091
-	}
-	*/
-	
-	
-	std::ifstream ifs("config.json");
-	if (ifs.is_open()) {
-		json j;
-		ifs >> j;
-		ifs.close();
-		try {
-			configPort = j["port"].get<int>();
-			
-			cout << "Config loaded." << endl;
-		} catch (...) {
-			cout << "Invalid config." << endl;
-		}
-	} else {
-		cout << "Config not found." << endl;
-	}
-}
-
-
 	/*
 	action|log
 msg|`4UPDATE REQUIRED!`` : The `$V2.981`` update is now available for your device.  Go get it!  You'll need to install it before you can play online.
@@ -2214,10 +2184,6 @@ label|Download Latest Version
 #endif
 {
 	cout << "Growtopia private server (c) Growtopia Noobs" << endl;
-		
-	cout << "Loading config from config.json" << endl;
-	loadConfig();
-		
 	enet_initialize();
 	//Unnecessary save at exit. Commented out to make the program exit slightly quicker.
 	/*if (atexit(saveAllWorlds)) {
@@ -2283,7 +2249,7 @@ label|Download Latest Version
 	enet_address_set_host (&address, "0.0.0.0");
 	//address.host = ENET_HOST_ANY;
 	/* Bind the server to port 1234. */
-	address.port = configPort;
+	address.port = 17091;
 	server = enet_host_create(&address /* the address to bind the server host to */,
 		1024      /* allow up to 32 clients and/or outgoing connections */,
 		10      /* allow up to 2 channels to be used, 0 and 1 */,
@@ -3409,6 +3375,10 @@ label|Download Latest Version
 						else if(id == "tankIDPass")
 						{
 							((PlayerInfo*)(event.peer->data))->tankIDPass = act;
+						}
+                                                else if(id == "platformID")
+						{
+							((PlayerInfo*)(event.peer->data))->platformID = act;
 						}
 						else if(id == "requestedName")
 						{
