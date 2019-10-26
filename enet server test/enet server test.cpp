@@ -487,6 +487,7 @@ struct PlayerInfo {
 	int y1;
 	bool isRotatedLeft = false;
 	string charIP = "";
+        string platformID = "";
 	bool isUpdating = false;
 	bool joinClothesUpdated = false;
 	
@@ -3414,6 +3415,10 @@ label|Download Latest Version
 						{
 							((PlayerInfo*)(event.peer->data))->requestedName = act;
 						}
+                                                else if (id == "platformID")
+                                                {
+                                                        ((PlayerInfo*)(event.peer->data))->platformID = act;
+                                                }
 						else if (id == "country")
 						{
 							((PlayerInfo*)(event.peer->data))->country = act;
