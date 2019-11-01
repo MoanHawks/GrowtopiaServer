@@ -3298,6 +3298,24 @@ label|Download Latest Version
 							}
 						}
 					}*/
+                                        else if (str == "/hidestatus") {
+                                        GamePacket p;
+                                        if (((PlayerInfo*)(peer->data))->haveSuperSupporterName) {
+                                        p = packetEnd(appendString(appendString(createPacket(), "OnConsoleMessage"), "removed Super Supporter name"));
+					((PlayerInfo*)(peer->data))->haveSuperSupporterName = false;
+					sendState(peer);
+	                                }
+	                                else {
+                                        p = packetEnd(appendString(appendString(createPacket(), "OnConsoleMessage"), "Added Super supporter name"));
+					((PlayerInfo*)(peer->data))->haveSuperSupporterName = true;
+					sendState(peer);
+					}
+					ENetPacket * packet = enet_packet_create(p.data,
+					p.len,
+					ENET_PACKET_FLAG_RELIABLE);
+					enet_peer_send(peer, 0, packet);
+					delete p.data;
+                                        }					
 					else if (str == "/unmod")
 					{
 						((PlayerInfo*)(peer->data))->canWalkInBlocks = false;
