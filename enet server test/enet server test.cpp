@@ -1798,6 +1798,7 @@ void SendPacketRaw(int a1, void *packetData, size_t packetDataSize, void *a4, EN
 		ENetPeer * currentPeer;
 		GamePacket p = packetEnd(appendString(appendString(createPacket(), "OnRemove"), "netID|" + std::to_string(player->netID) + "\n")); // ((PlayerInfo*)(server->peers[i].data))->tankIDName
 		GamePacket p2 = packetEnd(appendString(appendString(createPacket(), "OnConsoleMessage"), "`5<`w" + player->displayName + "`` left, `w" + std::to_string(getPlayersCountInWorld(player->currentWorld)) + "`` others here>``"));
+                GamePacket p3 = packetEnd(appendIntx(appendString(appendIntx(appendString(createPacket(), "OnTalkBubble"), ((PlayerInfo*)(currentPeer->data))->netID), "`5<`w" + player->displayName + "`` left, `w" + std::to_string(getPlayersCountInWorld(player->currentWorld)) + "`` others here>``"), 1));				
 		for (currentPeer = server->peers;
 			currentPeer < &server->peers[server->peerCount];
 			++currentPeer)
@@ -1829,10 +1830,18 @@ void SendPacketRaw(int a1, void *packetData, size_t packetDataSize, void *a4, EN
 					enet_peer_send(currentPeer, 0, packet2);
 					
 				}
+                                {
+                                        ENetPacket * packet3 = enet_packet_create(p3.data,
+						p3.len,
+						ENET_PACKET_FLAG_RELIABLE);
+
+					enet_peer_send(currentPeer, 0, packet3);
+                                }
 			}
 		}
 		delete p.data;
 		delete p2.data;
+                delete p3.data;
 	}
 
 	static inline void ltrim(string &s)
