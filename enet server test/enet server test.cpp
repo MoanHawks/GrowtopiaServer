@@ -2855,8 +2855,6 @@ label|Download Latest Version
 						data.characterState = 0x0; // animation
 						data.x = 1000;
 						data.y = 0;
-						data.punchX = 0;
-						data.punchY = 0;
 						data.XSpeed = 300;
 						data.YSpeed = 600;
 						data.netID = ((PlayerInfo*)(peer->data))->netID;
