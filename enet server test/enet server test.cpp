@@ -100,7 +100,6 @@ ulong _byteswap_ulong(ulong x)
 
 //configs
 int configPort = 17091;
-string configCDN = "0098/CDNContent37/cache/";
 
 
 /***bcrypt***/
@@ -2303,7 +2302,6 @@ void loadConfig() {
 	/*inside config.json:
 	{
 	"port": 17091,
-	"cdn": "0098/CDNContent37/cache/"
 	}
 	*/
 	
@@ -2314,15 +2312,28 @@ void loadConfig() {
 		ifs >> j;
 		ifs.close();
 		try {
-			configPort = j["port"].get<int>();
-			configCDN = j["cdn"].get<string>();
-			
+			configPort = j["port"].get<int>();						
 			cout << "Config loaded." << endl;
 		} catch (...) {
 			cout << "Invalid config." << endl;
 		}
 	} else {
 		cout << "Config not found." << endl;
+	}
+}
+
+int CheckIsCDN(char *str)
+{
+	using namespace std;
+	int out;
+	string in;
+	while(true) {
+		cout << str;
+		getline(cin,in);
+		stringstream ss(in); 
+		if(ss >> out && !(ss >> in)) return out;
+		cin.clear(); 
+		cerr << "\nInvalid CDN. Please try again.\n"; 
 	}
 }
 
@@ -2353,11 +2364,12 @@ label|Download Latest Version
 	int main()
 #endif
 {
-	cout << "Growtopia private server (c) Growtopia Noobs" << endl;
-		
+        int cdn; 
+	cout << "Growtopia private server (c) Growtopia Noobs" << endl;		
 	cout << "Loading config from config.json" << endl;
 	loadConfig();
-		
+        int cdn = CheckIsCDN("Please enter Newest CDN number: ");
+        string configCDN = "0098/CDNContent"+atoi(cdn)+"/cache/";
 	enet_initialize();
 	//Unnecessary save at exit. Commented out to make the program exit slightly quicker.
 	/*if (atexit(saveAllWorlds)) {
