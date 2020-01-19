@@ -2364,12 +2364,11 @@ label|Download Latest Version
 	int main()
 #endif
 {
-        int cdn; 
 	cout << "Growtopia private server (c) Growtopia Noobs" << endl;		
 	cout << "Loading config from config.json" << endl;
 	loadConfig();
         int cdn = CheckIsCDN("Please enter Newest CDN number: ");
-        string configCDN = "0098/CDNContent"+atoi(cdn)+"/cache/";
+        string configCDN = "0098/CDNContent"+cdn+"/cache/";
 	enet_initialize();
 	//Unnecessary save at exit. Commented out to make the program exit slightly quicker.
 	/*if (atexit(saveAllWorlds)) {
