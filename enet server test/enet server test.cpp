@@ -2368,7 +2368,8 @@ label|Download Latest Version
 	cout << "Loading config from config.json" << endl;
 	loadConfig();
         int cdn = CheckIsCDN("Please enter Newest CDN number: ");
-        string configCDN = "0098/CDNContent"cdn"/cache/";
+        string idk = lexical_cast<string>(cdn);
+        string configCDN = "0098/CDNContent"+idk+"/cache/";
 	enet_initialize();
 	//Unnecessary save at exit. Commented out to make the program exit slightly quicker.
 	/*if (atexit(saveAllWorlds)) {
