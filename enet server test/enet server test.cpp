@@ -1622,7 +1622,14 @@ void SendPacketRaw(int a1, void *packetData, size_t packetDataSize, void *a4, EN
 					if (tile == 32) {
 						if (world->items[x + (y*world->width)].foreground == 242 or world->items[x + (y*world->width)].foreground == 202 or world->items[x + (y*world->width)].foreground == 204 or world->items[x + (y*world->width)].foreground == 206 or world->items[x + (y*world->width)].foreground == 2408 or world->items[x + (y*world->width)].foreground == 5980 or world->items[x + (y*world->width)].foreground == 2950 or world->items[x + (y*world->width)].foreground == 5814 or world->items[x + (y*world->width)].foreground == 4428 or world->items[x + (y*world->width)].foreground == 1796 or world->items[x + (y*world->width)].foreground == 4802 or world->items[x + (y*world->width)].foreground == 4994 or world->items[x + (y*world->width)].foreground == 5260 or world->items[x + (y*world->width)].foreground == 7188)
 						{
-							GamePacket p = packetEnd(appendString(appendString(createPacket(), "OnDialogRequest"), "set_default_color|`o\n\nadd_label_with_icon|big|`wShould this world be publicly breakable?``|left|242|\n\nadd_spacer|small|\nadd_button_with_icon|worldPublic|Public|noflags|2408||\nadd_button_with_icon|worldPrivate|Private|noflags|202||\nadd_spacer|small|\nadd_quick_exit|\nadd_button|chc0|Close|noflags|0|0|\nend_dialog|wl_edit|||")); // Added dialog name
+                                                        int check;
+                                                        if (world->isPublic == true) {
+                                                        ischeck = 1;
+	                                                }
+                                                        else {
+                                                        ischeck = 0;
+                                                        }
+							GamePacket p = packetEnd(appendString(appendString(createPacket(), "OnDialogRequest"), "set_default_color|`o\n\nadd_label_with_icon|big|`wEdit World Lock``|left|242|\nadd_checkbox|WorldPublic|Allow anyone to build|" + std::to_string(ischecked) + "|\nadd_spacer|small|\nadd_quick_exit|\nadd_button|chc0|Close|noflags|0|0|\nend_dialog|wl_edit|||")); // Added dialog name
 							ENetPacket * packet = enet_packet_create(p.data,
 								p.len,
 								ENET_PACKET_FLAG_RELIABLE);
@@ -2744,9 +2751,24 @@ label|Download Latest Version
 							}
 						}
 					}
-					if (btn == "worldPublic") if (((PlayerInfo*)(peer->data))->rawName == getPlyersWorld(peer)->owner) getPlyersWorld(peer)->isPublic = true;
-					if(btn == "worldPrivate") if (((PlayerInfo*)(peer->data))->rawName == getPlyersWorld(peer)->owner) getPlyersWorld(peer)->isPublic = false;
-#ifdef REGISTRATION
+                                        if (infoDat[0] == "WorldPublic" && infoDat[1] == "1") 
+						{
+							if (((PlayerInfo*)(peer->data))->rawName == getPlyersWorld(peer)->owner) getPlyersWorld(peer)->isPublic = true;
+						}
+						if (infoDat[0] == "WorldPublic" && infoDat[1] == "0")
+						{
+							if (((PlayerInfo*)(peer->data))->rawName == getPlyersWorld(peer)->owner) getPlyersWorld(peer)->isPublic = false;
+						}
+					}
+					if (infoDat[0] == "WorldPublic" && infoDat[1] == "1") {
+						{
+							if (((PlayerInfo*)(peer->data))->rawName == getPlyersWorld(peer)->owner) getPlyersWorld(peer)->isPublic = true;
+						}
+						if (infoDat[0] == "WorldPublic" && infoDat[1] == "0")
+						{
+							if (((PlayerInfo*)(peer->data))->rawName == getPlyersWorld(peer)->owner) getPlyersWorld(peer)->isPublic = false;
+						}
+					}
 					if (isRegisterDialog) {
 
 						int regState = PlayerDB::playerRegister(username, password, passwordverify, email, discord);
