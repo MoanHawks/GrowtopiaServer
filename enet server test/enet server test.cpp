@@ -784,8 +784,8 @@ WorldDB::WorldDB() {
 	// Constructor
 }
 
-void sendConsoleMsg(ENetPeer* peer, bool peer, string message) {
-	if (peer) {
+void sendConsoleMsg(ENetPeer* peer, string message, bool CheckPeer) {
+	if (CheckPeer) {
 		ENetPeer * currentPeer;
 		for (currentPeer = server->peers;
 			currentPeer < &server->peers[server->peerCount];
@@ -799,7 +799,7 @@ void sendConsoleMsg(ENetPeer* peer, bool peer, string message) {
 				ENetPacket * packet = enet_packet_create(p.data,
 				    p.len,
 				ENET_PACKET_FLAG_RELIABLE);
-				enet_peer_send(currentpeer, 0, packet);
+				enet_peer_send(currentPeer, 0, packet);
 				delete p.data;
 			}
 		}
