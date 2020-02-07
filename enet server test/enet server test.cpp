@@ -3169,7 +3169,7 @@ label|Download Latest Version
 						delete p.data;
 					}
 					else if (str == "/invis") {
-						sendConsoleMsg(peer, "`6" + str);
+						sendConsoleMsg(peer, "`6" + str, false);
 						if (!pData->isGhost) {
 
 							sendConsoleMsg(peer, "`oYour atoms are suddenly aware of quantum tunneling. (Ghost in the shell mod added)", false);
