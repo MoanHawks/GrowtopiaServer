@@ -784,36 +784,6 @@ WorldDB::WorldDB() {
 	// Constructor
 }
 
-void sendConsoleMsg(ENetPeer* peer, string message, bool CheckPeer) {
-	if (CheckPeer) {
-		ENetPeer * currentPeer;
-		for (currentPeer = server->peers;
-			currentPeer < &server->peers[server->peerCount];
-			++currentPeer)
-		{
-			if (currentPeer->state != ENET_PEER_STATE_CONNECTED)
-				continue;
-			if (isHere(peer, currentPeer))
-			{
-				GamePacket p = packetEnd(appendString(appendString(createPacket(), "OnConsoleMessage"), message));
-				ENetPacket * packet = enet_packet_create(p.data,
-				    p.len,
-				ENET_PACKET_FLAG_RELIABLE);
-				enet_peer_send(currentPeer, 0, packet);
-				delete p.data;
-			}
-		}
-	}
-	else {
-		GamePacket p = packetEnd(appendString(appendString(createPacket(), "OnConsoleMessage"), message));
-	        ENetPacket * packet = enet_packet_create(p.data,
-		    p.len,
-		ENET_PACKET_FLAG_RELIABLE);
-	        enet_peer_send(peer, 0, packet);
-	        delete p.data;
-	}
-}
-
 string getStrUpper(string txt) {
 	string ret;
 	for (char c : txt) ret += toupper(c);
@@ -1315,6 +1285,36 @@ bool isSuperAdmin(string username, string password) {
 bool isHere(ENetPeer* peer, ENetPeer* peer2)
 {
 	return ((PlayerInfo*)(peer->data))->currentWorld == ((PlayerInfo*)(peer2->data))->currentWorld;
+}
+
+void sendConsoleMsg(ENetPeer* peer, string message, bool CheckPeer) {
+	if (CheckPeer) {
+		ENetPeer * currentPeer;
+		for (currentPeer = server->peers;
+			currentPeer < &server->peers[server->peerCount];
+			++currentPeer)
+		{
+			if (currentPeer->state != ENET_PEER_STATE_CONNECTED)
+				continue;
+			if (isHere(peer, currentPeer))
+			{
+				GamePacket p = packetEnd(appendString(appendString(createPacket(), "OnConsoleMessage"), message));
+				ENetPacket * packet = enet_packet_create(p.data,
+				    p.len,
+				ENET_PACKET_FLAG_RELIABLE);
+				enet_peer_send(currentPeer, 0, packet);
+				delete p.data;
+			}
+		}
+	}
+	else {
+		GamePacket p = packetEnd(appendString(appendString(createPacket(), "OnConsoleMessage"), message));
+	        ENetPacket * packet = enet_packet_create(p.data,
+		    p.len,
+		ENET_PACKET_FLAG_RELIABLE);
+	        enet_peer_send(peer, 0, packet);
+	        delete p.data;
+	}
 }
 
 void sendInventory(ENetPeer* peer, PlayerInventory inventory)
@@ -3172,7 +3172,7 @@ label|Download Latest Version
 						sendConsoleMsg(peer, "`6" + str);
 						if (!pData->isGhost) {
 
-							sendConsoleMsg(peer, "`oYour atoms are suddenly aware of quantum tunneling. (Ghost in the shell mod added)");
+							sendConsoleMsg(peer, "`oYour atoms are suddenly aware of quantum tunneling. (Ghost in the shell mod added)", false);
 
 							GamePacket p2 = packetEnd(appendFloat(appendString(createPacket(), "OnSetPos"), pData->x, pData->y));
 							memcpy(p2.data + 8, &(((PlayerInfo*)(peer->data))->netID), 4);
@@ -3188,7 +3188,7 @@ label|Download Latest Version
 							pData->isGhost = true;
 						}
 						else {
-							sendConsoleMsg(peer, "`oYour body stops shimmering and returns to normal. (Ghost in the shell mod removed)");
+							sendConsoleMsg(peer, "`oYour body stops shimmering and returns to normal. (Ghost in the shell mod removed)", false);
 
 							GamePacket p2 = packetEnd(appendFloat(appendString(createPacket(), "OnSetPos"), pData->x1, pData->y1));
 							memcpy(p2.data + 8, &(((PlayerInfo*)(peer->data))->netID), 4);
@@ -3752,7 +3752,7 @@ label|Download Latest Version
 #endif
 						try {
 							if (act.length() > 30) {
-								sendConsoleMsg(peer, "`4Sorry, but world names with more than 30 characters are not allowed!");
+								sendConsoleMsg(peer, "`4Sorry, but world names with more than 30 characters are not allowed!", false);
 								((PlayerInfo*)(peer->data))->currentWorld = "EXIT";
 								GamePacket p2 = packetEnd(appendIntx(appendString(createPacket(), "OnFailedToEnterWorld"), 1));
 								ENetPacket* packet2 = enet_packet_create(p2.data,
@@ -3851,7 +3851,7 @@ label|Download Latest Version
                                                                 if (((PlayerInfo*)(peer->data))->taped) {
                                                                 ((PlayerInfo*)(peer->data))->isDuctaped = true;
                                                                 sendState(peer);
-                                                                }
+																																}
 							}
 						}
 						catch (int e) {
