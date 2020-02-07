@@ -1296,15 +1296,12 @@ void sendConsoleMsg(ENetPeer* peer, string message, bool CheckPeer) {
 		{
 			if (currentPeer->state != ENET_PEER_STATE_CONNECTED)
 				continue;
-			if (isHere(peer, currentPeer))
-			{
-				GamePacket p = packetEnd(appendString(appendString(createPacket(), "OnConsoleMessage"), message));
-				ENetPacket * packet = enet_packet_create(p.data,
-				    p.len,
-				ENET_PACKET_FLAG_RELIABLE);
-				enet_peer_send(currentPeer, 0, packet);
-				delete p.data;
-			}
+			GamePacket p = packetEnd(appendString(appendString(createPacket(), "OnConsoleMessage"), message));
+			ENetPacket * packet = enet_packet_create(p.data,
+			    p.len,
+			ENET_PACKET_FLAG_RELIABLE);
+			enet_peer_send(currentPeer, 0, packet);
+			delete p.data;	
 		}
 	}
 	else {
