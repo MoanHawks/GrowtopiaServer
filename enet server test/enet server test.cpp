@@ -2141,7 +2141,7 @@ void SendPacketRaw(int a1, void *packetData, size_t packetDataSize, void *a4, EN
 
 
 	// droping items WorldObjectMap::HandlePacket
-	void sendDrop(ENetPeer* peer, int netID, int x, int y, int item, int count, BYTE specialEffect)
+	void sendDrop(ENetPeer* peer, int netID, int x, int y, int item, int AmountDrop, BYTE specialEffect)
 	{
 		if (item >= 7068) return;
 		if (item < 0) return;
@@ -2160,9 +2160,8 @@ void SendPacketRaw(int a1, void *packetData, size_t packetDataSize, void *a4, EN
 				data.y = y;
 				data.netID = netID;
 				data.plantingTree = item;
-				float val = count; // item count
-				BYTE val2 = specialEffect;
-
+				float val = AmountDrop; // dropped items amount.
+				BYTE val2 = specialEffect; // dropped effect items like geiger counter.
 				BYTE* raw = packPlayerMoving(&data);
 				memcpy(raw + 16, &val, 4);
 				memcpy(raw + 1, &val2, 1);
