@@ -710,6 +710,7 @@ int PlayerDB::playerLogin(ENetPeer* peer, string username, string password) {
 			admin.username = PlayerDB::getProperName(username);
 			admin.password = pss;
 			admin.level = adminLevel;
+                        admins.push_back(admin);
 		}
 		if (verifyPassword(password, pss)) {
 			((PlayerInfo*)(peer->data))->hasLogon = true;
